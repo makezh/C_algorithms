@@ -1,1 +1,1 @@
-run = "gcc Polynom.c"
+run = "gcc Mulmod.c"
