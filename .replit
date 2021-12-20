@@ -1,1 +1,1 @@
-run = "gcc Mulmod.c"
+run = "gcc fibsys.c"
