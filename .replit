@@ -1,1 +1,1 @@
-run = "gcc maxk.c"
+run = "gcc maxk.c -lm"

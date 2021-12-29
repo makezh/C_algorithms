@@ -1,5 +1,5 @@
 #include <stdio.h>
-long long fib(long long n, int type)// 0 - index; 1 - number
+unsigned long long fib(unsigned long long n, int type)// 0 - index; 1 - number
 {
 	if (n == 0 || n == 1)
 	{
@@ -9,7 +9,7 @@ long long fib(long long n, int type)// 0 - index; 1 - number
 		return 1;
 	}
 
-	long long f1 = 0, f2 = 1, f3 = 1, i = 0;
+	unsigned long long f1 = 0, f2 = 1, f3 = 1, i = 0;
 	while (f3 <= n)
 	{
 		f1 = f2;
@@ -52,14 +52,15 @@ int main()
 	long long LEN = fib(n,0);
 	long long ans[LEN];
 	for(int i=0; i< LEN; i++)
-	ans[i] = 0;
+		ans[i] = 0;
 	
+	//printf("%lld", fib(n,1));
 	fibsys(n,ans);
 	for(int i=LEN; i>0;i--)
 	printf("%lld", ans[i-1]);
 
 	//for(int i=0; i< LEN; i++)
-	//printf("%lld", ans[i]);
+	//printf("%lld", ans[i]); 
 	return 0;
 }
 

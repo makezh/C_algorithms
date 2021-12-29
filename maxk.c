@@ -16,11 +16,15 @@ void findK(long long mas[], long long k, long long n, long long *sum, long long 
 {
 	for(int i = k; i < n; i++)
 	{
+		//printf("sum: %lld  1st: %lld   2nd: %lld  ", *sum, mas[i%k], mas[i]);
 		*sum -= mas[i % k];
 		*sum += mas[i];
-		
+		//printf("sum2: %lld\n", *sum);
 		if(*sum > *maxsum)
+		{
 			*maxsum = *sum;
+		}
+		mas[i%k] = mas[i];
 	}	
 } 
 
