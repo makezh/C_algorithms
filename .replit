@@ -1,1 +1,1 @@
-run = "gcc fibsys.c"
+run = "gcc maxk.c"

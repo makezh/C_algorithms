@@ -11,7 +11,7 @@ int main(int argc, char **argv){
 		x /= 2;
 		i++;
 	}
-	res = a*b2[--i];
+	res = a*b2[i--];
 
 	for(int j = i-1; j>0;j--) // используем схему Горнера 
 	{
