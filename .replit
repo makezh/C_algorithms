@@ -1,1 +1,1 @@
-run = "gcc intersect.c -lm"
+run = "c99 -Wall -Wextra -Werror binsearch.c -lm"

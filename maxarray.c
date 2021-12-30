@@ -11,7 +11,7 @@ int compare(char *a, char *b)
 			else return 0;
 }
 
-int maxarray(char *base, size_t nel, size_t width,
+int maxarray(void *base, size_t nel, size_t width,
         int (*compare)(char *a, char *b))
 {
 	char *max = malloc(width);
@@ -19,7 +19,7 @@ int maxarray(char *base, size_t nel, size_t width,
 	
 	memcpy(max, base, width);
 
-	for (int i = 1; i < nel; i++)
+	for (size_t i = 1; i < nel; i++)
 	{
 		if (compare(base + i*width, max) > 0) 
 		{
@@ -34,7 +34,7 @@ int maxarray(char *base, size_t nel, size_t width,
 
 int main()
 {
-	/*unsigned char a[] = {1, 2, 5 ,4, 3 ,1};
+	/* unsigned char a[] = {1, 2, 5 ,4, 3 ,1};
 	int n = 6;
 	printf("%d\n", maxarray(a, n, sizeof(unsigned char), compare));*/
 	return 0;
