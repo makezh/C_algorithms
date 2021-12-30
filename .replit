@@ -1,1 +1,1 @@
-run = "gcc revarray.c -lm"
+run = "gcc intersect.c -lm"

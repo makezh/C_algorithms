@@ -3,13 +3,13 @@
 #include <stdlib.h>
 
 
-void revarray(void *base, unsigned long nel, unsigned long width)
+void revarray(char *base, unsigned long nel, unsigned long width)
 {
-	void *tmp = malloc(width);
+	char *tmp = malloc(width);
 	
 	for(int i = 0; i < nel/2; i++)
 	{
-		void *left = base + i * width, *right = base + (nel - 1 - i) * width;
+		char *left = base + i * width, *right = base + (nel - 1 - i) * width;
 		
 		memcpy(tmp, right, width);
 		memcpy(right, left, width);

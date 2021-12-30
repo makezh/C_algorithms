@@ -2,31 +2,6 @@
 #include <stdlib.h>
 #define inf 1e5;
 
-long long answery(long long mas[], long long n)
-{
-	long long ans = 1;
-	for(int i=0; i<n; i++){
-		if(mas[i]!=0 && n%mas[i]==0)
-		{
-			ans = mas[i];
-		}
-	}
-	return ans;
-}
-
-void sieve(long long mas[], long long n)
-{
-	mas[1] = 0;
-	for(int i=2; i<n; i++){
-		if(mas[i]!=0){
-			for(int j=i*2; j<n; j+=i)
-			{
-				mas[j]=0;
-			}
-		}
-	}
-}
-
 int reverse(int value){
     int tmp = 0;
     while(value > 0){
@@ -84,14 +59,31 @@ void run(long long n, long long m,long long mas[][m], long long col[],long long 
         }
 }
 }
-
-void answer(long long n, long long m,long long mas[][m], long long col[],long long colk[],long long row[],long long rowk[])
+void run2(long long n, long long m,long long mas[][m], long long col[],long long colk[],long long row[],long long rowk[])
 {
 	for (int i = 0; i < n; i++){
         for (int j = 0; j < m; j++){
-            if (row[i] == col[j]){
+            if (mas[i][j] < col[j])
+						{
+                col[j] = mas[i][j];
+               	colk[j] = j;
+            }
+            if (mas[i][j] > row[i]){
+                row[i] = mas[i][j];
+                rowk[i] = i;
+            }
+        }
+}
+}
+
+void answer(long long n, long long m,long long mas[][m], long long col[],long long colk[],long long row[],long long rowk[],long long *ans)
+{
+	for (int i = 0; i < n; i++){
+        for (int j = 0; j < m; j++){
+            if (row[i] == col[j] && (*ans == 0))
+						{
                 printf("%lld %lld", rowk[i], colk[j]);
-								exit(1);
+								*ans = 1; 
             }
         }
     }
@@ -101,7 +93,7 @@ int main(){
     long long n, m, s[10][10], rowmax[10], colmin[10], rowkord[10], colkord[10];
     scanf("%lld %lld", &n, &m);
 
-		long long a=5,b=2;
+		long long a=5,b=2, ans = 0;
 		long long SUMMMM = sum(a,b);
 		long long MULTIIII = mult(a,b);
 		Neg(&a);
@@ -110,9 +102,13 @@ int main(){
 		maxrow(rowmax,n);
 
 		run(n,m,s,colmin,colkord,rowmax,rowkord);
-		
-		answer(n,m,s,colmin,colkord,rowmax,rowkord);
 
-    printf("none");
+		mincolumn(colmin,m);
+		maxrow(rowmax,n);
+		run2(n,m,s,colmin,colkord,rowmax,rowkord);
+
+		answer(n,m,s,colmin,colkord,rowmax,rowkord,&ans);
+		
+		if (ans == 0) printf("none");
     return 0;
 }
