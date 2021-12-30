@@ -56,15 +56,48 @@ void sieve(long long mas[], long long n)
 	}
 }
 
-int main(){
+long long maxPrimeFactors(long long n)
+{
+    long long maxPrime = -1;
+    while (n % 2 == 0) {
+        maxPrime = 2;
+        n /= 2; 
+    }
+
+    while (n % 3 == 0) {
+        maxPrime = 3;
+        n /= 3;
+    }
+
+    for (int i = 5; i <= sqrt(n); i += 6) {
+        while (n % i == 0) {
+            maxPrime = i;
+            n = n / i;
+        }
+        while (n % (i + 2) == 0) {
+            maxPrime = i + 2;
+            n = n / (i + 2);
+        }
+    }
+
+    if (n > 4)
+        maxPrime = n;
+ 
+    return maxPrime;
+}
+ 
+// Driver program to test above function
+int main()
+{
 	long long N;
 	scanf("%lld", &N);
 	Neg(&N);
 
-	long long a[N];
-
-	order(a,N);
-	sieve(a,N);
-
-	printf("%lld", answer(a,N));
+	long long a[N%5];
+	order(a,N%5);
+	sieve(a,N%5);
+	//printf("%d", (-4)%5);
+	printf("%lld", maxPrimeFactors(N));
+ 
+    return 0;
 }
