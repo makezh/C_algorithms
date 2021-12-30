@@ -1,1 +1,1 @@
-run = "gcc primediv.c -lm"
+run = "gcc revarray.c -lm"
