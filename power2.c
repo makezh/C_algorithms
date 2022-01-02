@@ -2,25 +2,26 @@
 #include <string.h>
 #include <stdlib.h>
 
-void scanmas(long mas[], long n)
+int scanmas(int mas[], int n)
 {
 	for(long i = 0; i < n; i++)
-		scanf("%ld", &mas[i]);
+		scanf("%d", &mas[i]);
+	return *mas;
 }
 
-int power2(int x)
+int isPower2(int x)
 {
 	if (x<=0) return 0;
 	else return !(x & (x-1));
 }
 
-long sum_pow2(long now, long mas[], long n, long it_sum)
+int count_pow2(int now, int mas[], int n, int it_sum)
 {
     it_sum += mas[now];
-    long check_pow = power2(it_sum);
+    int check_pow = isPower2(it_sum);
 
-    for (long j = now + 1; j < n; j++)
-      check_pow += sum_pow2(j, mas, n, it_sum);
+    for (int j = now + 1; j < n; j++)
+      check_pow += count_pow2(j, mas, n, it_sum);
 
     return check_pow;
 }
@@ -28,16 +29,16 @@ long sum_pow2(long now, long mas[], long n, long it_sum)
 
 int main()
 {
-    long n;
-    scanf("%ld", &n);
+    int n;
+    scanf("%d", &n);
 
-    long *nums = malloc(n * sizeof(long));
-    scanmas(nums,n);
-		
-		long ans = 0;
+    int *nums = malloc(n * sizeof(int));
+    *nums = scanmas(nums,n);
+
+	  int ans = 0;
 		for(long i = 0; i < n; i++)
-			ans += sum_pow2(i, nums, n, 0);
+			ans += count_pow2(i, nums, n, 0);
 
-		printf("%ld", ans);
+		printf("%d", ans);
     return 0;
 }
