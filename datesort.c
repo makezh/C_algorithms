@@ -2,73 +2,82 @@
 #include <stdlib.h>
 #include <string.h>
 
+int INDEX;
+
+int addElem(int mas[], int n, int elem)
+{
+	for(int i = 0; i < n; i++)
+		mas[i] = elem;
+	return *mas;
+}
+
+
 struct Date
 {
 	int Year, Month, Day;
 };
 
-int IDX;
+
+
 
 int key(struct Date date)
 {
 	int keys[] = {date.Day - 1, date.Month - 1, date.Year - 1970};
-	return keys[IDX];
+	return keys[INDEX];
 }
 
 
-void dsort(int base, struct Date *dates, int n)
+void datesort(int base, struct Date *dates, int n)
 {
-	int count[base];
+	int* count = (int*)malloc(sizeof(int)*base);
 
-	for(int i = 0; i < base; i++) count[i] = 0;
+	*count = addElem(count, base, 0);
 	
 	for(int i = 0; i < n; i++)
 	{
 		int k = key(dates[i]);
+		//printf("%d\n", k);
 		count[k]++;
 	}
+
 	for(int i = 1; i < base; i++)
 		count[i] += count[i - 1];
 
-	struct Date sorted_dates[n];
+	struct Date sortDate[n];
 
 	for(int i = n - 1; i >= 0; i--)
 	{
 		int k = key(dates[i]);
-
-		int j = --count[k];
-		sorted_dates[j] = dates[i];
+		count[k]--;
+		int j = count[k];
+		sortDate[j] = dates[i];
 	}
 
-	for(int i = 0; i < n; i++) dates[i] = sorted_dates[i];
-}
+	for(int i = 0; i < n; i++) 
+		dates[i] = sortDate[i];
 
-void radixsort(struct Date *dates, int n)
-{
-	int bases[] = {31, 12, 61};
-	for(int i = 0; i < 3; i++)
-	{
-		IDX = i;
-		dsort(bases[i], dates, n);
-	}
+	free(count);
 }
 
 
 int main()
 {
 	int n;
+	int basis[] = {31, 12, 61};
 	scanf("%i", &n);
 	struct Date dates[n];
-	for(int i = 0; i < n; i++)
+	for(int i = 0; i < n; i++) 
+		scanf("%d %d %d", &(dates+i)->Year, &(dates+i)->Month, &(dates+i)->Day);
+
+	for(int i = 0; i < 3; i++)
 	{
-		scanf("%d %d %d", &dates[i].Year, &dates[i].Month, &dates[i].Day);
+		INDEX = i;
+		datesort(basis[i], dates, n);
 	}
 
-	radixsort(dates, n);
-
 	for(int i = 0; i < n; i++)
 	{
-		printf("%d %d %d\n", dates[i].Year, dates[i].Month, dates[i].Day);
+		printf("%04d %02d %02d\n", (dates+i)->Year, (dates+i)->Month, (dates+i)->Day);
 	}
 	return 0;
 }
