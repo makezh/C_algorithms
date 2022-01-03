@@ -57,11 +57,13 @@ int main()
     *nums = scanmas(nums,n);
 		int answer = incPow2(&answer,4);
 
+		
 	  int ans = 0;
 		for(int i = 0; i < n; i++)
 			count_pow2(&ans, nums, i, n, nums[i]);
 
 
 		printf("%d", ans);
+		free(nums);
     return 0;
 }
