@@ -18,9 +18,15 @@ int smallerThan(int x, int y)
 {
 	return x < y;
 }
+
+int smalleroreqThan(int x, int y)
+{
+	return x <= y;
+}
+
 int isPower2(int x)
 {
-	if (x<=0) return 0;
+	if (smalleroreqThan(x,0)) return 0;
 	else return !(x & (x-1));
 }
 
@@ -31,13 +37,13 @@ int incPow2(int *ans, int x)
 		return answer;
 }
 
-void count_pow2(int *ans, int mas[], int now, int n, int sum)
+void count_pow2(int *ans, int *mas, int now, int n, int sum)
 {
 	if (smallerThan(now, n))
 	{
 		if (isPower2(sum)) (*ans)++;
-  	for (int i = now; i < n; i++)
-  		count_pow2(ans, mas, inc(&now), n, sum + mas[now]);
+  	for (int i = now+1; i < n; i++)
+  		count_pow2(ans, mas, i, n, sum + mas[i]);
 	}
 }
 
@@ -52,7 +58,8 @@ int main()
 		int answer = incPow2(&answer,4);
 
 	  int ans = 0;
-		count_pow2(&ans, nums, 0, n, 0);
+		for(int i = 0; i < n; i++)
+			count_pow2(&ans, nums, i, n, nums[i]);
 
 
 		printf("%d", ans);
