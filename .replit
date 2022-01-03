@@ -1,1 +1,1 @@
-run = "c99 -Wall -Wextra -Werror quicksort.c -lm"
+run = "c99 -Wall -Wextra -Werror dsort.c -lm"

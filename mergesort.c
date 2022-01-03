@@ -95,10 +95,10 @@ void insertSort(int mas[], int left, int right)
 
 void Merge(int mas[], int left, int med, int right)
 {
-	int sortMas[right - left + 1], i = left, j = med + 1, h = 0;
+	int sortMas[right - left + 1], i = left, j = med, h = 0;
 	while (h < right - left + 1)
 	{
-		if (j <= right && (i == med + 1 || (abs(mas[j]) < abs(mas[i]))))
+		if (j <= right && (i == med || (abs(mas[j]) < abs(mas[i]))))
 		{
 			sortMas[h] = mas[j];
 			j++;
@@ -110,19 +110,22 @@ void Merge(int mas[], int left, int med, int right)
 		}
 		h++;
 	}
-	for(int i = left; i <= right; i++)
-		mas[i] = sortMas[i];
+	for(int i = left; i < right; i++)
+		mas[i] = sortMas[i-left];
 }
 
 void MergeSortRec(int mas[], int left, int right)
 {
-	if (right - left + 1 < 5) insertSort(mas,left,right);
-	else
+	if (left <= right-1)
 	{
-		int med = floor((right + left)/2);
-		MergeSortRec(mas,left,med);
-		MergeSortRec(mas,med+1,right);
-		Merge(mas, left, med, right);
+		if (right - left < 5) insertSort(mas,left,right);
+		else
+		{
+			int med = floor((right + left)/2);
+			MergeSortRec(mas,left,med);
+			MergeSortRec(mas,med,right);
+			Merge(mas, left, med, right);
+		}
 	}
 }
 
