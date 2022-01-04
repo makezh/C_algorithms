@@ -1,1 +1,1 @@
-run = "c99 -Wall -Wextra -Werror power2.c -lm"
+run = "c99 -Wall -Wextra -Werror kmpall.c -lm"
