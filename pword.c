@@ -40,10 +40,11 @@ int kmpsubst(char *sub, char *s)
 			q = pi[q-1];
 		 
 		if (sub[q] == s[k]) q++;
+		
+		if (q == 0) return 0;
 
 		if (q == sublen) q = pi[q-1];
 
-		if (q == 0) return 0;
 
 		k++;
 	}

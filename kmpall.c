@@ -29,7 +29,7 @@ void printmas(int mas[], int n)
 	}
 }
 
-int kmpsubst(char *sub, char *s, int **subind)
+int kmpsubst(char sub[], char *s, int **subind)
 {
 	int len = strlen(s), sublen = strlen(sub), pi[sublen], q = 0, k = 0, *index = NULL, count = 0;
 
@@ -52,6 +52,7 @@ int kmpsubst(char *sub, char *s, int **subind)
 	}
 	*subind = index;
 	return count;
+	free(index);
 }
 
 
