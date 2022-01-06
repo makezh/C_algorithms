@@ -79,7 +79,7 @@ void build(int v[], int a, int b, int T[], int i, int n)
 
 void SegmentTree_Build(int v[], int n, int **t)
 {
-	int *T = (int *)malloc(sizeof(int) * 2*n);
+	int *T = (int *)malloc(sizeof(int) * 4*n);
 	build(v, 0, n - 1, T, 0, n);
 	*t = T;
 }
