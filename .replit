@@ -1,1 +1,1 @@
-run = "c99 -Wall -Wextra -Werror rangepeak.c -lm"
+run = "c99 peak.c -lm"

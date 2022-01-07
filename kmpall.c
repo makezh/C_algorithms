@@ -33,8 +33,9 @@ int kmpsubst(char sub[], char *s, int **subind)
 {
 	int len = strlen(s), sublen = strlen(sub), pi[sublen], q = 0, k = 0,  count = 0;
 
+	int *index=NULL;
+
 	prefix(sub, pi, sublen);
-	int* index;
 	while (k < len)
 	{
 		while (q > 0 && sub[q] != s[k]) 
@@ -45,7 +46,7 @@ int kmpsubst(char sub[], char *s, int **subind)
 		if (q == sublen)
 		{
 			count++;
-			index = (int*)malloc(count * sizeof(int));
+			index = (int*)realloc(index, count * sizeof(int));
 			index[count-1] = k - q + 1;
 		}
 		k++;
@@ -62,7 +63,7 @@ int main(int argc, char **argv)
 	char *sub = argv[1],
 		 *word = argv[2];
 
-	int *subind;
+	int *subind=NULL;
 	int index_len = kmpsubst(sub, word, &subind);
 
 	printmas(subind, index_len);
