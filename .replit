@@ -1,1 +1,1 @@
-run = "c99 circbuf.c -lm"
+run = "c99 qmax.c -lm"
