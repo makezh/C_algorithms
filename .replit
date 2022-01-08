@@ -1,1 +1,1 @@
-run = "c99 peak.c -lm"
+run = "c99 stackmachine.c -lm"
