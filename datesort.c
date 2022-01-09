@@ -36,7 +36,6 @@ void datesort(int base, struct Date *dates, int n)
 	for(int i = 0; i < n; i++)
 	{
 		int k = key(dates[i]);
-		//printf("%d\n", k);
 		count[k]++;
 	}
 

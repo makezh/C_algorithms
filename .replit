@@ -1,1 +1,1 @@
-run = "c99 qmax.c -lm"
+run = "c99 listisort.c -lm"
