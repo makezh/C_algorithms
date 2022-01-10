@@ -55,14 +55,6 @@ long max(long a , long b)
 	if (a>=b) return a;
 	else return b;
 }
-char *mygets(char *dest, size_t size) {
-    /* read a line from standard input and strip the linefeed if any */
-    if (fgets(dest, size, stdin)) {
-        dest[strcspn(dest, "\n")] = '\0';
-        return dest;
-    }
-    return NULL;
-}
 
 int main()
 {	

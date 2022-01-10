@@ -29,7 +29,7 @@ void Init( int n)
 void Heapify(int i, int n)
 {	
 	int l,r,j;
-	for(;;)
+	while(1)
 	{
 		l=2*i+1;
 		r=l+1;
@@ -38,7 +38,8 @@ void Heapify(int i, int n)
 			i=l;
 		if (r<n && q.heap[i].finish>q.heap[r].finish)
 			i=r;
-		if (i==j) break;
+		if (i==j) 
+			break;
 		swap(i,j);
 	}
 }
