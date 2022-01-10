@@ -1,1 +1,1 @@
-run = "c99 listisort.c -lm"
+run = "c99 10.c -lm"

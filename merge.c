@@ -1,117 +1,131 @@
 #include <stdio.h>
 #include <stdlib.h>
-#include <string.h>
 
-#define MIN -2147483648;
+struct pair{
+        	int k,v;
+	};
+struct queue {        
+        	int cap,count;
+		struct pair *heap;
+		
+	};
+struct queue q;
 
-#define printmas()
-
-struct Priority{
-    int values;
-    int keys;
-};
-
-struct PriorityQueue{
-    struct Priority *heap;
-    int cap;
-    int count;
-};
-
-void InitPriorityQueue(struct PriorityQueue *q, int n)
+void swap(int i, int j)
 {
-	(*q).heap = (struct Priority *)malloc(sizeof(struct Priority) * n);
-  (*q).cap = n;
-  (*q).count = 0;
+	struct pair t;
+	t=q.heap[j];
+	q.heap[j]=q.heap[i];
+	q.heap[i]=t;
 }
 
-
-int Heapify(struct Priority *mas, int size) {
-    int cap = 0;
-		int i = cap;
-
-    while (i < size/2)
-    {
-        int left = 2*i + 1, right = 2*i+ 2, j = left;
-
-        if(right < size && mas[left].keys < mas[right].keys) 
-        	j = right;
-
-        if(mas[i].keys >= mas[j].keys)
-        	return cap;
-
-				struct Priority tmp = mas[i];
-				mas[i] = mas[j];
-				mas[j] = tmp;
-
-				cap = j;
-        i = cap;
-    }
-    return cap;
+void Init( int n)
+{	
+	q.heap=(struct pair*)malloc((n+1)*sizeof(struct pair));
+	q.count=0;
+	q.cap=n;
 }
 
-struct Priority Pop(struct PriorityQueue *q)
-{
-    struct Priority x = (*q).heap[0];
-
-    (*q).heap[0].keys = MIN;
-
-    (*q).count = Heapify((*q).heap, (*q).cap);
-
-    return x;
-}
-
-void Insert(struct PriorityQueue *q, struct Priority ptr)
-{
-    int i = (*q).count;
-
-		if (i == (*q).cap) printf("Переполение");
-		else
-		{
-			(*q).count++;
-			(*q).heap[i] = ptr;
-			while (i > 0 && (*q).heap[i].keys > (*q).heap[(i - 1) / 2].keys)
-			{
-				struct Priority tmp = (*q).heap[i];
-				(*q).heap[i] = (*q).heap[(i-1)/2];
-				(*q).heap[(i - 1) / 2] = tmp;
-				i--;
-				i /= 2;
-			}
-		}
-}
-
-int main() {
-  int n;
-	int SIZE = 0;
-  scanf("%d", &n);
-
-  for(int i = 0; i < n; i++)
-  {
-      int k;
-      scanf("%d", &k);
-      SIZE += k;
-  }
-  struct PriorityQueue queue;
-  InitPriorityQueue(&queue, SIZE);
-
-  for(int i = 0; i < SIZE; i++)
-  {
-      int x;
-			struct Priority seq;
-
-      scanf("%d", &x);
-
-      seq.values = x;
-      seq.keys = -seq.values;
-
-      Insert(&queue, seq);
-  }
-
-
-  for(int i = 0; i < SIZE; i++)
+void Heapify(int i, int n)
+{	
+	int l,r,j;
+	for(;;)
 	{
-		if (i == SIZE - 1) printf("%d\n", Pop(&queue).values);
-		else printf("%d ", Pop(&queue).values);
+		l=2*i+1;
+		r=l+1;
+		j=i;
+		if (l<n && q.heap[i].k>q.heap[l].k)
+			i=l;
+		if (r<n && q.heap[i].k>q.heap[r].k)
+			i=r;
+		if (i==j) break;
+		swap(i,j);
 	}
-  free(queue.heap);
+}
+
+void Insert(struct pair ptr)
+{	
+	int i=q.count;
+	q.count=i+1;
+	q.heap[i].k=ptr.k;
+	q.heap[i].v=ptr.v;
+	while (i>0 && q.heap[(i-1)/2].k > q.heap[i].k)
+	{	
+		swap((i-1)/2,i);
+		i=(i-1)/2;
+	}
+}
+
+struct pair ExtractMin()
+{
+	struct pair ptr;
+	ptr=q.heap[0];
+	--q.count;
+	if(q.count>0)
+	{
+		q.heap[0]=q.heap[q.count];
+		Heapify(0,q.count);
+	}
+	return ptr;
+}
+void Merge(int *result,  int n, struct pair **array, int *size)
+{	
+	int i,j=0;
+	int h[n];
+	struct pair ptr;
+	for(i=0;i<n;++i)
+	{	
+		Insert(array[i][0]);
+		h[i]=1;
+	}
+		
+	while(q.count!=0)
+	{	
+		ptr=ExtractMin();
+		result[j]=ptr.k;
+		if(h[ptr.v]<size[ptr.v])
+		{	
+			Insert(array[ptr.v][h[ptr.v]]);
+			++h[ptr.v];
+		}
+		++j;
+	}
+	
+}	
+int main()
+{
+	int n,i,j;
+	scanf("%d", &n);
+	struct pair *array[n];
+	int size[n],full_size=0;
+	for(int i=0;i<n;i++)
+	{
+		scanf("%d", &size[i]);
+		if(size[i]==0)
+		{
+			--i;
+			--n;
+		}
+	}
+	for(int i=0;i<n;i++)
+	{	
+		full_size+=size[i];
+		array[i]=(struct pair*)malloc((size[i]+1)*sizeof(struct pair));
+		for(j=0;j<size[i];++j)
+		{
+			scanf("%d", &array[i][j].k);
+			array[i][j].v=i;
+		}
+	}
+	int *result=(int*)malloc((full_size+1)*sizeof(int));
+	Init(n);
+	Merge(result,n,array,size);
+	for(int i=0;i<full_size;i++)
+		printf("%d ", result[i]);
+	printf("\n");
+	for(i=0;i<n;++i)
+		free(array[i]);
+	free(q.heap);
+        free(result);
+	return 0;
 }

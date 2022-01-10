@@ -1,152 +1,126 @@
 #include <stdio.h>
-#include <stdlib.h>
 #include <string.h>
+#include <stdlib.h>
 
-#define MIN -2147483648
-
-struct DoubleStack
-{
-	int *data;
-	int cap, top1, top2;
-};
-
-void InitQueue(struct DoubleStack *q, int n)
-{
-	(*q).data = (int *)malloc(sizeof(int) * n);
-	(*q).cap = n;
-	(*q).top1 = 0;
-	(*q).top2 = n - 1;
+struct pair{
+        	int *v, *m, *m2;};
+struct stack {        
+		int cap,top1,top2;
+		struct pair data;
+	};
+struct stack s;
+void push1(long x)
+{	
+	s.data.v[s.top1]=x;
+	if ((s.top1 == 0) || (x>s.data.m[s.top1-1]))
+		s.data.m[s.top1]=x;
+	else
+		s.data.m[s.top1]=s.data.m[s.top1-1];
+	++s.top1;
 }
-
-int StackEmpty1(struct DoubleStack q)
+void push2(long x, int n)
 {
-	return q.top1 == 0;
+	s.data.v[s.top2]=x;
+	if ((s.top2 == n-1) || (x>s.data.m2[s.top2+1]))
+		s.data.m2[s.top2]=x;
+	else
+		s.data.m2[s.top2]=s.data.m2[s.top2+1];
+	--s.top2;
 }
-
-int StackEmpty2(struct DoubleStack q)
+long pop1()
 {
-	return q.top2 == q.cap - 1;
+	--s.top1;
+	return s.data.v[s.top1];
 }
-
-void Clear(struct DoubleStack *q)
+long pop2()
 {
-	(*q).cap = 0;
-	(*q).top1 = -1;
-	(*q).top2 = -1;
-	free((*q).data);
-	(*q).data = NULL;
+	++s.top2;
+	return s.data.v[s.top2];
 }
-
-void Push1(struct DoubleStack *q, int x)
+void enq(long x)
+{	
+	push1(x);
+}
+long deq(int n)
 {
-	if ((*q).top1 > (*q).top2) printf("Переполнение");
+	if(s.top2==s.cap-1)
 	{
-		(*q).data[(*q).top1] = x;
-		(*q).top1++;
+		while (s.top1!=0)
+			push2(pop1(),n);
 	}
+		return pop2();
 }
-
-void Push2(struct DoubleStack *q, int x)
+long max(long a , long b)
 {
-	if ((*q).top1 > (*q).top2) printf("Переполнение");
-	{
-		(*q).data[(*q).top2] = x;
-		(*q).top2--;
-	}
+	if (a>=b) return a;
+	else return b;
 }
-
-int Pop1(struct DoubleStack *q)
-{
-	(*q).top1--;
-	return (*q).data[(*q).top1];
-}
-
-int Pop2(struct DoubleStack *q)
-{
-	(*q).top2++;
-	return (*q).data[(*q).top2];
-}
-
-void Maximum(struct DoubleStack *q, int *max)
-{
-	*max = MIN;
-
-	for(int i = 0; i < (*q).top1; i++)
-		if (*max < (*q).data[i])
-			*max = (*q).data[i];
- 
-	for(int i = (*q).top2; i <= (*q).cap-1; i++)
-		if (*max < (*q).data[i])
-			*max = (*q).data[i];
-
-}
-
-
-void Enqueue(struct DoubleStack *q, int *max, int x)
-{
-	if (x > *max) *max = x;
-	Push1(q, x);
-}
-
-int Dequeue(struct DoubleStack *q, int*max)
-{
-	if(StackEmpty2(*q) != 0)
-	{
-		while(StackEmpty1(*q) == 0)
-		{
-			int x = Pop1(q);
-
-			if(x > *max) 
-				*max = x;
-
-			Push2(q, x);
-		}
-	}
-	int x = Pop2(q);
-	if(x == *max)
-		Maximum(q, max);
-
-	return x;
+char *mygets(char *dest, size_t size) {
+    /* read a line from standard input and strip the linefeed if any */
+    if (fgets(dest, size, stdin)) {
+        dest[strcspn(dest, "\n")] = '\0';
+        return dest;
+    }
+    return NULL;
 }
 
 int main()
-{
-	int n;
-	scanf("%d", &n);
-
-	int max = MIN;
-
-	struct DoubleStack seq;
-	InitQueue(&seq, n+1);
-
-	for(int i = 0; i < n; i++)
-	{
-		char action[5];
-		scanf("%s", action);
-		int x;
-
-		if (strcmp(action, "ENQ")==0)
+{	
+	
+	int n,i,j;
+	long r,d,dup,sw1,sw2;
+	scanf("%d\n", &n);
+	s.data.v=(int*)malloc((n+1)*sizeof(int));
+	s.data.m=(int*)malloc((n+1)*sizeof(int));
+	s.data.m2=(int*)malloc((n+1)*sizeof(int));
+	s.cap=n;
+	s.top1=0;
+	s.top2=n-1;
+	char **str;
+	str=(char**)malloc((n+1)*sizeof(char*));
+	
+	for(i=0;i<n;i++)
+	{	
+		str[i]=malloc(60 * sizeof(char));
+		fgets(str[i],60,stdin);
+		d=1;
+		r=0;
+		if ((strcmp(str[i],"EMPTY\n"))==0)
 		{
-			scanf("%d", &x);
-			Enqueue(&seq, &max, x);
-		}
-		else if (strcmp(action, "DEQ")==0)
-		{
-			printf("%d\n", Dequeue(&seq, &max));
-		}
-		else if (strcmp(action, "EMPTY")==0)
-		{
-			if (StackEmpty1(seq) && StackEmpty2(seq))
+			if((s.top1==0)&&(s.top2==s.cap-1))
 				printf("true\n");
 			else
 				printf("false\n");
 		}
-		else if (strcmp(action, "MAX")==0)
+		else if (str[i][0]=='E' && str[i][1] == 'N' && str[i][2] == 'Q')
 		{
-			printf("%d\n", max);
-		}
-	}
 
-	Clear(&seq);
-	return 0;
+			for(j=strlen(str[i])-2;str[i][j]!= ' '; --j)
+			{
+				//printf("%c ", str[i][j]);
+				if(str[i][j]=='-')
+				r=-r;
+				else
+				{r=r+1*d*(str[i][j]-48);
+				d*=10;}
+			}
+			enq(r);
+		}
+		else if (strcmp(str[i],"DEQ\n")==0)
+			printf("%ld\n", deq(n));
+		else if (strcmp(str[i],"MAX\n")==0)
+		{	
+			if (s.top2==n-1 && s.top1!=0)
+				printf("%d\n", s.data.m[s.top1-1]);
+			else if (s.top2!=(n-1) && s.top1==0)
+				printf("%d\n", s.data.m2[s.top2+1]);
+			else
+				printf("%ld\n", max(s.data.m[s.top1-1],s.data.m2[s.top2+1]));
+		}
+		free(str[i]);
+	}
+	free(s.data.v);
+	free(s.data.m);
+	free(s.data.m2);
+	free(str);
 }
