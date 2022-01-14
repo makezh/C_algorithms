@@ -1,1 +1,1 @@
-run = "c99 ranktree.c -lm"
+run = "c99 dsort.c -lm"

@@ -2,107 +2,87 @@
 #include <stdlib.h>
 #include <string.h>
 
-#define STRLEN 100000
-#define NEXT continue
-#define STOP break
-
-struct Elem {
-    struct Elem *next;
-    char *word;
+struct elem { 
+    struct elem *next; 
+    char *word; 
 };
 
-
-int Compare(struct Elem *x, struct Elem *y)
+int letter(char x)
 {
-	if (strlen((*x).word) > strlen((*y).word)) return 1;
-	else if (strlen((*x).word) < strlen((*y).word)) return -1;
-	else return 0;
+	if ((x>='a' && x<='z') || (x>='A' && x<='Z'))
+		return 1;
+	return 0;
 }
 
-int Len(struct Elem *head) 
+struct elem *InsertAfter(struct elem *prev,char *word, int j)
 {
-	int len = 0;
-	for(struct Elem *el = head; el != NULL; el = (*el).next, len++);
-	return len;
+	struct elem *x=(struct elem*)malloc(1*sizeof(struct elem));
+	x->word=(char*)malloc((j+1)*sizeof(char));
+	strcpy((*x).word,word);
+	(*prev).next=x;
+	(*x).next=NULL;
+	return x;
 }
 
-struct Elem *bsort(struct Elem *head)
+struct elem *bsort(struct elem *l, struct elem *last)
 {
-    struct Elem *elem = head, *i, *tail = NULL;
-		while (elem != NULL && (*elem).next != tail)
+	struct elem *t=last,*prev;
+	while (t!=(*l).next)
+	{	
+		struct elem *bound=t;
+		struct elem *i=(*l).next;
+		t=(*l).next;
+		prev=l;
+		while (i !=bound && (*i).next != NULL)
 		{
-        i = elem;
-
-				while ((*i).next->next != tail)
-				{
-            if(strlen((*i).next->word) < strlen((*i).next->next->word))
-						{
-                struct Elem *tmp = (*i).next, *t = (*i).next->next->next;
-                (*i).next = (*i).next->next;
-                (*i).next->next = tmp;
-                (*i).next->next->next = t;
-            }
-
-					i = (*i).next;
-        }
-
-			tail = (*i).next;
-    }
-
-    return head;
+			if(strlen((*i).next->word)<strlen((*i).word))
+			{
+				struct elem *a,*b;
+				(*prev).next=(*i).next;
+				a=(*i).next;
+				b=(*i).next=i;
+				i=a;
+				(*b).next=(*a).next;
+				(*a).next=b;
+				t=i;	
+			}
+			prev=i;
+			i=(*i).next;
+		}
+	}
+	return l;
 }
-
-void PrintList(struct Elem *list){
-    if(list->next != NULL) 
-			PrintList((*list).next);
-    printf("%s ", (*list).word);
-    free((*list).word);
-    free(list);
-}
-
-
+	
 int main()
-{
-	struct Elem *head = (struct Elem *)malloc(sizeof(struct Elem));
-    (*head).next = NULL;
-		
-	char c = '0', sep = ' ', end='\n';
-
-  while (c != end) 
+{	
+	char s[1000];
+	fgets(s,1000,stdin);
+	int j=0,len=strlen(s);
+	char word[len];
+	struct elem *l=(struct elem*)malloc(sizeof(struct elem));
+	(*l).next=NULL;
+	struct elem *prev=l;
+	for(int i=0; i<=len; i++)
 	{
-    int k = 0;
-
-		char *word = malloc(STRLEN * sizeof(char));
-    scanf("%c", &c);
-
-    if(c == end)
+		if (letter(s[i]))
+			word[j++]=s[i];
+		else if (i==0 || letter(s[i-1]))
 		{
-        free(word);
-        STOP;
-    }
+			word[j]=0;
+			prev=InsertAfter(prev,word,j);
+			j=0;
+		}
+	}	
+	l=bsort(l,prev);
 
-    while (c != end && c != sep) {
-        word[k] = c;
-				k++;
-        scanf("%c", &c);
-    }
-
-    word[k] = '\0';
-    if(word[0] == '\0')
-		{
-      free(word);
-      NEXT;
-    }
-
-    struct Elem *elem = (struct Elem *)malloc(sizeof(struct Elem));
-
-    (*elem).next = (*head).next;
-    (*elem).word = word;
-    (*head).next = elem;
-    }
-	head = bsort(head);
-
-	PrintList(head->next);
-	printf("\n");
-	free(head);
+	struct elem *x=(*l).next,*t;
+	while(x!=NULL)
+	{	
+		t=(*x).next;
+		printf("%s ", (*x).word);
+		free((*x).word);
+		free(x);
+		x=t;
+	}
+	free(l);
 }
